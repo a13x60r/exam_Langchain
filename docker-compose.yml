@@ -1,0 +1,56 @@
+version: '3.8'
+
+services:
+  auth:
+    build:
+      context: ./src/api/authentication
+      dockerfile: Dockerfile.auth
+    container_name: auth_service
+    ports:
+      - "8000:8000"
+    environment:
+      - PYTHONUNBUFFERED=1
+    networks:
+      - langchain_net
+
+  main:
+    build:
+      context: .
+      dockerfile: ./src/api/assistant/Dockerfile.main
+    container_name: main_service
+    ports:
+      - "8001:8001"
+    environment:
+      - GROQ_API_KEY=${GROQ_API_KEY}
+      - LANGCHAIN_TRACING_V2=${LANGCHAIN_TRACING_V2}
+      - LANGCHAIN_API_KEY=${LANGCHAIN_API_KEY}
+      - AUTH_SERVICE_URL=http://auth:8000
+      - PYTHONUNBUFFERED=1
+    depends_on:
+      - auth
+    networks:
+      - langchain_net
+    volumes:
+      - ./src:/app/src
+
+  streamlit:
+    build:
+      context: .
+      dockerfile: ./src/Dockerfile.streamlit
+    container_name: streamlit_app
+    ports:
+      - "8501:8501"
+    environment:
+      - AUTH_SERVICE_URL=http://auth:8000
+      - MAIN_SERVICE_URL=http://main:8001
+    depends_on:
+      - auth
+      - main
+    networks:
+      - langchain_net
+    volumes:
+      - ./src:/app/src
+
+networks:
+  langchain_net:
+    driver: bridge
