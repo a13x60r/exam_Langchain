@@ -1,8 +1,15 @@
-[project]
-name = "langchain-mlops"
+[tool.uv]
+description = "LangChain Exam Project"
 version = "0.1.0"
-description = "Add your description here"
-readme = "README.md"
-requires-python = "==3.13.*"
+requires-python = ">=3.12"
 dependencies = [
+    "langchain>=0.3.0",
+    "langchain-groq>=0.1.0",
+    "langsmith>=0.1.0",
+    "pydantic>=2.0.0",
+    "fastapi>=0.109.0",
+    "uvicorn>=0.27.0",
+    "requests>=2.31.0",
+    "pytest>=8.0.0",
+    "python-dotenv>=1.0.0"
 ]
