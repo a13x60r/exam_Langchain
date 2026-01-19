@@ -9,21 +9,30 @@ llm = get_llm()
 
 # 1. Code Analysis Chain
 analysis_chain = (
-    analysis_prompt 
+    RunnablePassthrough.assign(
+        format_instructions=lambda _: analysis_parser.get_format_instructions()
+    )
+    | analysis_prompt 
     | llm 
     | analysis_parser
 )
 
 # 2. Test Generation Chain
 test_generation_chain = (
-    test_generation_prompt 
+    RunnablePassthrough.assign(
+        format_instructions=lambda _: test_generation_parser.get_format_instructions()
+    )
+    | test_generation_prompt 
     | llm 
     | test_generation_parser
 )
 
 # 3. Test Explanation Chain
 explanation_chain = (
-    explanation_prompt 
+    RunnablePassthrough.assign(
+        format_instructions=lambda _: explanation_parser.get_format_instructions()
+    )
+    | explanation_prompt 
     | llm 
     | explanation_parser
 )

@@ -1,21 +1,16 @@
 from langchain_core.prompts import PromptTemplate, ChatPromptTemplate, MessagesPlaceholder
 
 # 1. Code Analysis Prompt
+# 1. Code Analysis Prompt
 analysis_prompt = PromptTemplate(
     input_variables=["code", "format_instructions"],
-    template="""You are an expert Python developer. Analyze the following code:
+    template="""You are an expert Python developer. Analyze the following code for optimality, readability, and best practices.
 
 {code}
 
-Check for optimality, readability, and best practices.
-You MUST output a valid JSON with the following structure:
-{{
-    "is_optimal": boolean,
-    "issues": [list of strings describing issues found],
-    "suggestions": [list of strings describing improvement suggestions]
-}}
-
 {format_instructions}
+
+IMPORTANT: Receive the code, analyze it internally, but output ONLY the JSON object matching the schema. Do not output any markdown code blocks (like ```json), no headers, and no conversational text. just the raw JSON string.
 """
 )
 
@@ -27,12 +22,10 @@ test_generation_prompt = PromptTemplate(
 {code}
 
 Ensure the test covers edge cases and normal execution.
-You MUST output a valid JSON with the following structure:
-{{
-    "test_code": "The complete python code for the test, including imports"
-}}
 
 {format_instructions}
+
+IMPORTANT: Output ONLY the JSON object matching the schema. Do not output any markdown code blocks, no headers, and no conversational text.
 """
 )
 
@@ -44,12 +37,10 @@ explanation_prompt = PromptTemplate(
 {test_code}
 
 Break it down step by step essentially teaching what the test does.
-You MUST output a valid JSON with the following structure:
-{{
-    "explanation": "The detailed explanation text"
-}}
 
 {format_instructions}
+
+IMPORTANT: Output ONLY the JSON object. Do not output any markdown code blocks, no headers, and no conversational text.
 """
 )
 
