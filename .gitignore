@@ -44,3 +44,5 @@ Thumbs.db
 .pytest_cache/
 error.log
 error_docker.log
+
+TSK.md
