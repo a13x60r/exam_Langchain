@@ -39,3 +39,8 @@ ENV/
 # OS
 .DS_Store
 Thumbs.db
+
+# Testing
+.pytest_cache/
+error.log
+error_docker.log
